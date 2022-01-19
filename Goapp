@@ -1,0 +1,15 @@
+FROM golang:1.15-alpine3.12 AS gobuilder-stage
+
+MAINTAINER dm
+
+WORKDIT /usr/src/goapp
+
+COPY goapp.go
+
+RUN CGO_ENABLED=0 GOOS=linux  GOARCH=amd64 gobuild -o /usr/local/bin/gostart
+
+FROM scratch AS runtime-stage
+
+COPY --from =fobuilder-stage /usr/local/bin/gostart /user/local/bin/gostart
+
+CMD ["/usr/local/bin/gostart"]
